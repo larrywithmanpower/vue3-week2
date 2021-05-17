@@ -36,7 +36,6 @@ const app = {
     },    
     created() {
         this.login();
-        this.getProduct();
     }
 }
 
