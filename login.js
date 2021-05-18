@@ -1,4 +1,6 @@
-
+const username = document.querySelector('#username');
+const password = document.querySelector('#password');
+const form = document.querySelector('#form');
 const app = {
     data: {
         apiUrl: 'https://vue3-course-api.hexschool.io',
@@ -7,10 +9,6 @@ const app = {
         expired: '',
     },
     login() {
-        const username = document.querySelector('#username');
-        const password = document.querySelector('#password');
-        // const loginBtn = document.querySelector('#loginBtn');
-        const form = document.querySelector('#form');
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             console.log('success');
@@ -37,7 +35,7 @@ const app = {
                     console.log(err);
                 })
         });
-    },    
+    },
     created() {
         this.login();
     }

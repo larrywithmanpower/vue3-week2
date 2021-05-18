@@ -1,10 +1,15 @@
+const productList = document.querySelector('#productList');
+const productCount = document.querySelector('#productCount');
+const logoutBtn = document.querySelector('#logoutBtn');
+
 const app = {
     data: {
         apiUrl: 'https://vue3-course-api.hexschool.io',
         apiPath: 'larry',
-        products: []
+        products: [],
+        token: '',
     },
-    getProduct() {        
+    getProduct() {
         const url = `${this.data.apiUrl}/api/${this.data.apiPath}/products`;
         axios.get(url)
             .then((res) => {
@@ -22,12 +27,10 @@ const app = {
             })
     },
     render() {
-        const productList = document.querySelector('#productList');
-        const productCount = document.querySelector('#productCount');
         let str = '';
         this.data.products.forEach((item, index) => {
-            str += 
-            `
+            str +=
+                `
             <tr>
                 <td>${item.title}</td>
                 <td width="120">
@@ -50,7 +53,6 @@ const app = {
         productCount.textContent = this.data.products.length;
     },
     delProduct() {
-        const productList = document.querySelector('#productList');
         productList.addEventListener('click', (e) => {
             const action = e.target.dataset.action;
             if (action == 'remove') {
@@ -68,12 +70,29 @@ const app = {
             }
         })
     },
+    logout() {
+        // token還是一直存在cookie中，研究中
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const url = `${this.data.apiUrl}/logout`;
+            axios.post(url)
+                .then((res) => {
+                    console.log(res);
+                    // window.location = './login.html';
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+        })
+    },
     created() {
         // 一定要取出cookies，不然不給你使用一些功能，如刪除
-        const token = document.cookie.replace(/(?:(?:^|.*;\s*)hexToken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-        axios.defaults.headers.common['Authorization'] = token;
+        // token時間到會自動清除嗎?
+        this.data.token = document.cookie.replace(/(?:(?:^|.*;\s*)hexToken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+        axios.defaults.headers.common['Authorization'] = this.data.token;
         this.getProduct();
         this.delProduct();
+        this.logout();
     }
 }
 
