@@ -39,8 +39,11 @@ const app = {
                 <td width="120">
                     ${item.price}
                 </td>
-                <td width="100">
-                    <span class="text-success">${item.is_enabled ? '啟用' : '未啟用'}</span>
+                <td width="100">                   
+                    <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="${item.id}" data-action="status" ${item.is_enabled ? 'checked': ''}  data-id="${item.id}">
+                    <label class="form-check-label" for="${item.id}" data-id="${item.id}">${item.is_enabled ? '已啟用' : '未啟用'}</label>
+                </div>
                 </td>
                 <td width="120">
                     <button type="button" class="btn btn-sm btn-outline-danger move deleteBtn"
@@ -70,28 +73,48 @@ const app = {
             }
         })
     },
-    // logout() {
-    //     // token還是一直存在cookie中，研究中
-    //     logoutBtn.addEventListener('click', (e) => {
-    //         e.preventDefault();
-    //         const url = `${this.data.apiUrl}/logout`;
-    //         axios.post(url)
-    //             .then((res) => {
-    //                 // console.log(res);
-    //                 window.location = './login.html';
-    //             })
-    //             .catch((err) => {
-    //                 console.log(err);
-    //             })
-    //     })
-    // },
+    checkStatus() {
+        productList.addEventListener('click', (e) => {
+                const id = e.target.dataset.id;
+                const action = e.target.dataset.action;
+            // console.log(action);
+            if (action == "status") {
+                console.log('有點到');
+                this.data.products.forEach((item) => {
+                    // console.log(item.is_enabled);
+                    if (id == item.id) {
+                        item.is_enabled != !!item.is_enabled;
+                        console.log(!item.is_enabled);
+                    }
+                })
+            }
+            // console.log(this.data.products);
+        })
+    },
+    logout() {
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const url = `${this.data.apiUrl}/logout`;
+            axios.post(url)
+                .then((res) => {
+                    // 消除cookie
+                    document.cookie = `hexToken=; expires=; path=/`;
+                    alert(res.data.message)
+                    window.location = './index.html';
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+        })
+    },
     created() {
         // 一定要取出cookies，不然不給你使用一些功能，如刪除
         this.data.token = document.cookie.replace(/(?:(?:^|.*;\s*)hexToken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
         axios.defaults.headers.common['Authorization'] = this.data.token;
         this.getProduct();
         this.delProduct();
-        // this.logout();
+        this.checkStatus();
+        this.logout();
     }
 }
 
