@@ -40,7 +40,7 @@ const app = {
                     ${item.price}
                 </td>
                 <td width="100">
-                    <span class="text-success">${item.is_enabled == 1 ? '啟用' : '未啟用'}</span>
+                    <span class="text-success">${item.is_enabled ? '啟用' : '未啟用'}</span>
                 </td>
                 <td width="120">
                     <button type="button" class="btn btn-sm btn-outline-danger move deleteBtn"
@@ -70,29 +70,28 @@ const app = {
             }
         })
     },
-    logout() {
-        // token還是一直存在cookie中，研究中
-        logoutBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const url = `${this.data.apiUrl}/logout`;
-            axios.post(url)
-                .then((res) => {
-                    console.log(res);
-                    // window.location = './login.html';
-                })
-                .catch((err) => {
-                    console.log(err);
-                })
-        })
-    },
+    // logout() {
+    //     // token還是一直存在cookie中，研究中
+    //     logoutBtn.addEventListener('click', (e) => {
+    //         e.preventDefault();
+    //         const url = `${this.data.apiUrl}/logout`;
+    //         axios.post(url)
+    //             .then((res) => {
+    //                 // console.log(res);
+    //                 window.location = './login.html';
+    //             })
+    //             .catch((err) => {
+    //                 console.log(err);
+    //             })
+    //     })
+    // },
     created() {
         // 一定要取出cookies，不然不給你使用一些功能，如刪除
-        // token時間到會自動清除嗎?
         this.data.token = document.cookie.replace(/(?:(?:^|.*;\s*)hexToken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
         axios.defaults.headers.common['Authorization'] = this.data.token;
         this.getProduct();
         this.delProduct();
-        this.logout();
+        // this.logout();
     }
 }
 

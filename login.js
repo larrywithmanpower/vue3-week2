@@ -26,7 +26,7 @@ const app = {
                         // console.log(this.token, this.expired);
                         // 儲存至cookie
                         document.cookie = `hexToken=${this.token}; expires=${new Date(this.expired)}`;
-                        window.location = 'product.html';
+                        window.location = 'productList.html';
                     } else {
                         alert(res.data.message)
                     }
