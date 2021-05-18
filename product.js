@@ -4,16 +4,14 @@ const app = {
         apiPath: 'larry',
         products: []
     },
-    getProduct() {
-        // 一定要取出cookies，不然不給你使用一些功能，如刪除
-        const token = document.cookie.replace(/(?:(?:^|.*;\s*)hexToken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-        axios.defaults.headers.common['Authorization'] = token;
+    getProduct() {        
         const url = `${this.data.apiUrl}/api/${this.data.apiPath}/products`;
         axios.get(url)
             .then((res) => {
+                // 判斷資料是否成功取得
                 if (res.data.success) {
                     this.data.products = res.data.products;
-                    console.log(this.data.products);
+                    // console.log(this.data.products);
                     this.render();
                 } else {
                     alert(res.data.message)
@@ -39,7 +37,7 @@ const app = {
                     ${item.price}
                 </td>
                 <td width="100">
-                    <span class="text-success">${item.is_enabled ? '啟用' : '未啟用'}</span>
+                    <span class="text-success">${item.is_enabled == 1 ? '啟用' : '未啟用'}</span>
                 </td>
                 <td width="120">
                     <button type="button" class="btn btn-sm btn-outline-danger move deleteBtn"
@@ -61,6 +59,7 @@ const app = {
                 axios.delete(url)
                     .then((res) => {
                         console.log(res);
+                        alert(res.data.message);
                         this.getProduct();
                     })
                     .catch((err) => {
@@ -70,6 +69,9 @@ const app = {
         })
     },
     created() {
+        // 一定要取出cookies，不然不給你使用一些功能，如刪除
+        const token = document.cookie.replace(/(?:(?:^|.*;\s*)hexToken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+        axios.defaults.headers.common['Authorization'] = token;
         this.getProduct();
         this.delProduct();
     }
