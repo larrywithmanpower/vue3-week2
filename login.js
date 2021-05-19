@@ -4,9 +4,7 @@ const form = document.querySelector('#form');
 const app = {
     data: {
         apiUrl: 'https://vue3-course-api.hexschool.io',
-        apiPath: 'larry',
-        token: '',
-        expired: '',
+        apiPath: 'larry'
     },
     login() {
         form.addEventListener('submit', (e) => {
@@ -21,11 +19,10 @@ const app = {
             axios.post(url, user)
                 .then((res) => {
                     if (res.data.success) {
-                        this.token = res.data.token;
-                        this.expired = res.data.expired
+                        const { token, expired } = res.data;
                         // console.log(this.token, this.expired);
-                        // 儲存至cookie
-                        document.cookie = `hexToken=${this.token}; expires=${new Date(this.expired)}`;
+                        // ! 儲存至cookie
+                        document.cookie = `hexToken=${token}; expires=${new Date(expired)}`;
                         window.location = 'productList.html';
                     } else {
                         alert(res.data.message)
