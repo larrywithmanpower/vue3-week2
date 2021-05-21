@@ -10,7 +10,7 @@ const app = {
         token: '',
     },
     getProduct() {
-        const url = `${this.data.apiUrl}/api/${this.data.apiPath}/products`;
+        const url = `${this.data.apiUrl}/api/${this.data.apiPath}/admin/products`;
         axios.get(url)
             .then((res) => {
                 // 判斷資料是否成功取得
@@ -86,7 +86,7 @@ const app = {
                     this.data.products = [];
                     alert(res.data.message)
                     window.location = './index.html';
-                    // ? 回上一頁商品列表都會出現??清空products也是會跑出來
+                    // ? 回上一頁商品列表都會出現??清空products也是會跑出來 => 接到正確API即便出現商品列表也無法刪除!!
                 })
                 .catch((err) => {
                     console.log(err);
